@@ -1,25 +1,27 @@
-# 🦞 ClawGuard AI: Your Local Binance Sentinel
-Built with **OpenClaw** & **Ollama** for the #AIBinance Challenge.
+# 🦞 ClawGuard AI: Local Telegram Sentinel for Binance
+**Built for the #AIBinance Challenge using the OpenClaw Framework.**
 
 ## 🚀 Overview
-ClawGuard AI is a privacy-first, local AI assistant designed to protect Binance users from emotional trading. Unlike cloud-based bots, it runs entirely on your machine using the **OpenClaw framework** and **Ollama**.
+ClawGuard AI is a high-performance, privacy-focused AI assistant that monitors the **Binance** market and sends real-time trading advice directly to your **Telegram**. 
+
+Unlike standard bots, it runs a **local LLM (TinyLlama)** on your machine via **Ollama**, ensuring your data and strategy stay 100% private.
 
 ## ✨ Key Features
-- **Local Intelligence:** Powered by `tinyllama` via Ollama. No data leaves your computer.
-- **Live Market Sync:** Connects to **Binance API** to fetch real-time prices (BTC/USDT, etc.).
-- **Risk Management:** Provides professional trading advice and volatility warnings based on live data.
-- **Hardware Efficient:** Optimized to run even on 5-year-old laptops.
+- **Real-Time Data:** Fetches live BTC/USDT prices directly from Binance API.
+- **Local AI Brain:** Uses `tinyllama` to generate professional trading insights without internet-based AI fees.
+- **Telegram Integration:** Sends instant market reports and risk warnings to your phone.
+- **Hardware Optimized:** Engineered to run smoothly even on 5-year-old laptops.
+- **Privacy First:** Your API keys and trading thoughts never leave your local hardware.
 
-## 🛠️ Technical Stack
+## 🛠️ Tech Stack
 - **Framework:** [OpenClaw](https://github.com)
-- **Engine:** [Ollama](https://ollama.com) (Model: `tinyllama`)
+- **Engine:** [Ollama](https://ollama.com)
 - **Language:** Python 3.10+
-- **Library:** `python-binance`
+- **APIs:** Binance Public API & Telegram Bot API
 
-## 📦 How to Run
-1. Install Ollama and run `ollama run tinyllama`.
-2. Install dependencies: `pip install openclaw python-binance requests`.
-3. Run the script: `python binance_ai.py`.
+## 📦 Installation & Setup
+1. **Install Ollama:** Download and run `ollama run tinyllama`.
+2. **Install Dependencies:**
+   ```bash
+   pip install python-binance pyTelegramBotAPI requests
 
-## 🛡️ Privacy & Safety
-This agent does **not** require "Withdrawal" permissions on your Binance API. It uses read-only access to provide sentiment and technical analysis locally.
