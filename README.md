@@ -1,27 +1,35 @@
-# 🦞 ClawGuard AI: Local Telegram Sentinel for Binance
-**Built for the #AIBinance Challenge using the OpenClaw Framework.**
+🦞 OpenClaw: Local AI Market Sentinel
+OpenClaw — это легковесный аналитический фреймворк на базе Python, который объединяет мощь Binance API и локальных языковых моделей (Ollama) для создания автономного торгового ассистента.
+Проект создан в рамках конкурса #AIBinance.
+✨ Основные возможности
+🚀 Real-time Monitoring: Прямое подключение к Binance API для отслеживания пары BTC/USDT.
+🧠 Local Intelligence: Использование модели TinyLlama (через Ollama) для анализа рынка без облачных запросов и платных подписок.
+📊 Technical Analysis: Автоматический расчет индикатора RSI и определение тренда.
+🔔 Smart Alerts: Система отправляет уведомления в Telegram только при значимых изменениях цены (защита от рыночного шума).
+🛡️ Privacy First: Все вычисления происходят локально на вашем устройстве.
+🛠 Стек технологий
+Language: Python 3.10+
+AI Engine: Ollama (Model: TinyLlama / Gemma)
+Framework: OpenClaw Logic
+Libraries: pandas, python-binance, pyTelegramBotAPI, requests
+🚀 Быстрый старт
+Установите Ollama и скачайте модель:
+bash
+ollama run tinyllama
+Используйте код с осторожностью.
 
-## 🚀 Overview
-ClawGuard AI is a high-performance, privacy-focused AI assistant that monitors the **Binance** market and sends real-time trading advice directly to your **Telegram**. 
+Установите зависимости:
+bash
+pip install pandas python-binance pyTelegramBotAPI requests
+Используйте код с осторожностью.
 
-Unlike standard bots, it runs a **local LLM (TinyLlama)** on your machine via **Ollama**, ensuring your data and strategy stay 100% private.
+Настройте Telegram:
+Создайте бота через @BotFather и вставьте свой TOKEN и CHAT_ID в код.
+Запустите стража:
+bash
+python binance_ai.py
+Используйте код с осторожностью.
 
-## ✨ Key Features
-- **Real-Time Data:** Fetches live BTC/USDT prices directly from Binance API.
-- **Local AI Brain:** Uses `tinyllama` to generate professional trading insights without internet-based AI fees.
-- **Telegram Integration:** Sends instant market reports and risk warnings to your phone.
-- **Hardware Optimized:** Engineered to run smoothly even on 5-year-old laptops.
-- **Privacy First:** Your API keys and trading thoughts never leave your local hardware.
-
-## 🛠️ Tech Stack
-- **Framework:** [OpenClaw](https://github.com)
-- **Engine:** [Ollama](https://ollama.com)
-- **Language:** Python 3.10+
-- **APIs:** Binance Public API & Telegram Bot API
-
-## 📦 Installation & Setup
-1. **Install Ollama:** Download and run `ollama run tinyllama`.
-2. **Install Dependencies:**
-   ```bash
-   pip install python-binance pyTelegramBotAPI requests
-
+📝 Дисклеймер
+Данный проект создан в образовательных целях и не является финансовой рекомендацией. Торговля криптовалютой сопряжена с высокими рисками.
+⭐ Разработано для сообщества Binance Square.
