@@ -1,38 +1,39 @@
+# -*- coding: utf-8 -*-
 import pandas as pd
 import telebot
 import time
 import requests
 from binance.client import Client
 
-# --- НАСТРОЙКИ (Заполни свои данные) ---
-TOKEN = "ТВОЙ_ТЕЛЕГРАМ_ТОКЕН"
-CHAT_ID = "ТВОЙ_CHAT_ID"
+# --- SETTINGS ---
+TOKEN = ""
+CHAT_ID = ""
 MODEL = "tinyllama:latest"
 
-# Инициализация
+# Initialization
 bot = telebot.TeleBot(TOKEN)
-client = Client() # Для публичных данных ключи не обязательны
+client = Client() 
 last_price = None
 
 def get_market_data():
-    """Получаем данные с Binance и считаем индикаторы"""
+    """Fetching data from Binance and calculating RSI/Trend"""
     try:
-        # Берем данные за последние 12 часов
+        # Get last 12 hours of 15m klines
         klines = client.get_historical_klines("BTCUSDT", Client.KLINE_INTERVAL_15MINUTE, "12 hours ago UTC")
         df = pd.DataFrame(klines).iloc[:, [0, 4]]
         df.columns = ['time', 'close']
         df['close'] = pd.to_numeric(df['close'])
         
-        # Расчет RSI
+        # RSI calculation
         delta = df['close'].diff()
         up = delta.clip(lower=0).rolling(window=14).mean()
         down = -delta.clip(upper=0).rolling(window=14).mean()
         rsi_val = 100 - (100 / (1 + (up / down.replace(0, 0.001))))
         
-        # Расчет тренда (скользящая средняя за 20 периодов)
+        # Trend calculation (SMA 20)
         sma = df['close'].rolling(window=20).mean().iloc[-1]
         current_price = df['close'].iloc[-1]
-        trend = "ВВЕРХ 📈" if current_price > sma else "ВНИЗ 📉"
+        trend = "BULLISH 📈" if current_price > sma else "BEARISH 📉"
         
         return {
             "price": float(current_price),
@@ -40,47 +41,48 @@ def get_market_data():
             "trend": trend
         }
     except Exception as e:
-        print(f"❌ Ошибка Binance: {e}")
+        print(f"❌ Binance Error: {e}")
         return None
 
 def ask_llama(data, change):
-    """Запрос к локальной TinyLlama через Ollama"""
+    """Request to local TinyLlama via Ollama (OpenClaw Framework)"""
     url = "http://localhost:11434/api/generate"
-    prompt = (f"Ты — аналитик OpenClaw. Рынок BTC изменился на {change:.2f}%. "
-              f"Цена: {data['price']}, RSI: {data['rsi']}, Тренд: {data['trend']}. "
-              f"Дай ОЧЕНЬ краткий совет трейдеру на русском языке.")
+    # Prompt is now in English for international judges
+    prompt = (f"You are OpenClaw AI analyst. BTC market changed by {change:.2f}%. "
+              f"Price: {data['price']}, RSI: {data['rsi']}, Trend: {data['trend']}. "
+              f"Give a VERY short professional trading advice in English (1 sentence).")
     
     payload = {"model": MODEL, "prompt": prompt, "stream": False}
     try:
-        r = requests.post(url, json=payload, timeout=10)
-        return r.json().get('response', 'Лама не смогла сформулировать ответ.')
+        r = requests.post(url, json=payload, timeout=15)
+        return r.json().get('response', 'Llama could not generate a response.')
     except requests.exceptions.ConnectionError:
-        return "⚠️ Ollama не запущена. Проверь приложение Ollama в трее!"
+        return "⚠️ Error: Ollama is not running! Please check your system tray."
     except Exception as e:
-        return f"⚠️ Ошибка нейросети: {str(e)}"
+        return f"⚠️ AI Error: {str(e)}"
 
 def send_alert(market_data, diff):
-    """Формирование и отправка красивого сообщения"""
+    """Sending professional Markdown message to Telegram"""
     advice = ask_llama(market_data, diff)
     
     msg = (
         f"🦞 *OpenClaw Sentinel 2026 Alert*\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"💰 *Цена:* ${market_data['price']:,.2f} ({diff:+.2f}%)\n"
+        f"💰 *Price:* ${market_data['price']:,.2f} ({diff:+.2f}%)\n"
         f"📊 *RSI:* {market_data['rsi']}\n"
-        f"📈 *Тренд:* {market_data['trend']}\n"
+        f"📈 *Trend:* {market_data['trend']}\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"🤖 *Совет Ламы:* {advice}"
+        f"🤖 *Llama's Advice:* {advice}"
     )
     
     try:
         bot.send_message(CHAT_ID, msg, parse_mode="Markdown")
-        print("✅ Сообщение в Telegram отправлено!")
+        print(f"✅ Alert sent to Telegram! Change: {diff:.2f}%")
     except Exception as e:
-        print(f"❌ Ошибка отправки в Telegram: {e}")
+        print(f"❌ Telegram Error: {e}")
 
-print("📡 OpenClaw Sentinel 2026 запущен...")
-print("Система мониторинга Binance + TinyLlama готова к работе.")
+print("📡 OpenClaw Sentinel 2026: Monitoring started...")
+print("System Status: Binance API Connected | TinyLlama Ready.")
 
 while True:
     market = get_market_data()
@@ -90,14 +92,16 @@ while True:
         if last_price:
             diff = ((curr_p - last_price) / last_price) * 100
             
-            # Порог срабатывания (0.01% для теста)
-            if abs(diff) >= 0.01:
-                print(f"🔔 Зафиксировано движение: {diff:.2f}%")
+            # Sensitivity threshold: 0.05% for real use
+            if abs(diff) >= 0.05:
                 send_alert(market, diff)
         
         last_price = curr_p
     
-    print("⏳ Ожидание 60 сек...")
+    print("⏳ Waiting 60 seconds for next update...")
     time.sleep(60)
 
-  
+
+
+
+    
