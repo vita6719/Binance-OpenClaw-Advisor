@@ -16,7 +16,6 @@ Libraries: pandas, python-binance, pyTelegramBotAPI, requests
 Установите Ollama и скачайте модель:
 bash
 ollama run tinyllama
-Используйте код с осторожностью.
 
 Установите зависимости:
 bash
